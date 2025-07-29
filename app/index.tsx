@@ -2,20 +2,12 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import { Calculator, Upload, Target, FileText } from 'lucide-react-native';
 import TaxCalculator from '../components/TaxCalculator';
-import BankDataImport from '../components/BankDataImport';
-import ReceiptUpload from '../components/ReceiptUpload';
-import PDFReportGenerator from '../components/PDFReportGenerator';
 
 const Index = () => {
-  // Set default tab to 'calculator'
-  const [activeTab, setActiveTab] = useState('calculator');
   const [taxData, setTaxData] = useState({
     income: 1200000,
     deductions: { section80C: 150000, section80D: 25000, section80G: 0, homeLoanInterest: 200000 },
@@ -40,146 +32,44 @@ const Index = () => {
   const [taxResult, setTaxResult] = useState(null);
   const [isCalculated, setIsCalculated] = useState(false);
 
-  const tabs = [
-    { id: 'calculator', label: 'Calculator', icon: Calculator },
-    { id: 'bank-import', label: 'Bank Data', icon: Upload },
-    { id: 'ocr', label: 'OCR Scanner', icon: FileText },
-    { id: 'reports', label: 'Reports', icon: Target },
-  ];
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'calculator':
-        return (
-          <TaxCalculator
-            onTaxDataChange={setTaxData}
-            income={income}
-            setIncome={setIncome}
-            employmentType={employmentType}
-            setEmploymentType={setEmploymentType}
-            ageGroup={ageGroup}
-            setAgeGroup={setAgeGroup}
-            deductions80C={deductions80C}
-            setDeductions80C={setDeductions80C}
-            deductions80D={deductions80D}
-            setDeductions80D={setDeductions80D}
-            hraExemption={hraExemption}
-            setHraExemption={setHraExemption}
-            homeLoanInterest={homeLoanInterest}
-            setHomeLoanInterest={setHomeLoanInterest}
-            educationLoanInterest={educationLoanInterest}
-            setEducationLoanInterest={setEducationLoanInterest}
-            nps={nps}
-            setNps={setNps}
-            deductions80G={deductions80G}
-            setDeductions80G={setDeductions80G}
-            regime={regime}
-            setRegime={setRegime}
-            taxResult={taxResult}
-            setTaxResult={setTaxResult}
-            isCalculated={isCalculated}
-            setIsCalculated={setIsCalculated}
-          />
-        );
-      case 'bank-import':
-        return <BankDataImport onDataImport={() => {}} />;
-      case 'ocr':
-        return <ReceiptUpload />;
-      case 'reports':
-        return (
-          <PDFReportGenerator
-            taxData={{
-              income: Number(income) || 0,
-              deductions: {
-                section80C: deductions80C,
-                section80D: deductions80D,
-                section80G: deductions80G,
-                homeLoanInterest: homeLoanInterest
-              },
-              oldRegimeTax: taxData.oldRegimeTax,
-              newRegimeTax: taxData.newRegimeTax,
-              recommendation: taxData.recommendation,
-              savings: taxData.savings
-            }}
-          />
-        );
-      default:
-        return (
-          <TaxCalculator
-            onTaxDataChange={setTaxData}
-            income={income}
-            setIncome={setIncome}
-            employmentType={employmentType}
-            setEmploymentType={setEmploymentType}
-            ageGroup={ageGroup}
-            setAgeGroup={setAgeGroup}
-            deductions80C={deductions80C}
-            setDeductions80C={setDeductions80C}
-            deductions80D={deductions80D}
-            setDeductions80D={setDeductions80D}
-            hraExemption={hraExemption}
-            setHraExemption={setHraExemption}
-            homeLoanInterest={homeLoanInterest}
-            setHomeLoanInterest={setHomeLoanInterest}
-            educationLoanInterest={educationLoanInterest}
-            setEducationLoanInterest={setEducationLoanInterest}
-            nps={nps}
-            setNps={setNps}
-            deductions80G={deductions80G}
-            setDeductions80G={setDeductions80G}
-            regime={regime}
-            setRegime={setRegime}
-            taxResult={taxResult}
-            setTaxResult={setTaxResult}
-            isCalculated={isCalculated}
-            setIsCalculated={setIsCalculated}
-          />
-        );
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Smart Tax Assistant</Text>
-        <Text style={styles.subtitle}>AI-powered tax optimization for Indian taxpayers</Text>
+        <Text style={styles.title}>Tax Calculator</Text>
+        <Text style={styles.subtitle}>Calculate your income tax efficiently</Text>
       </View>
 
-      {/* Add spacing between header and tabs */}
-      <View style={{ height: 16 }} />
-
-      <View style={styles.tabContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {tabs.map((tab) => {
-            const IconComponent = tab.icon;
-            return (
-              <TouchableOpacity
-                key={tab.id}
-                style={[
-                  styles.tab,
-                  activeTab === tab.id && styles.activeTab
-                ]}
-                onPress={() => setActiveTab(tab.id)}
-              >
-                <IconComponent
-                  size={20}
-                  color={activeTab === tab.id ? '#ffffff' : '#666666'}
-                />
-                <Text style={[
-                  styles.tabText,
-                  activeTab === tab.id && styles.activeTabText
-                ]}>
-                  {tab.label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+      <View style={styles.content}>
+        <TaxCalculator
+          onTaxDataChange={setTaxData}
+          income={income}
+          setIncome={setIncome}
+          employmentType={employmentType}
+          setEmploymentType={setEmploymentType}
+          ageGroup={ageGroup}
+          setAgeGroup={setAgeGroup}
+          deductions80C={deductions80C}
+          setDeductions80C={setDeductions80C}
+          deductions80D={deductions80D}
+          setDeductions80D={setDeductions80D}
+          hraExemption={hraExemption}
+          setHraExemption={setHraExemption}
+          homeLoanInterest={homeLoanInterest}
+          setHomeLoanInterest={setHomeLoanInterest}
+          educationLoanInterest={educationLoanInterest}
+          setEducationLoanInterest={setEducationLoanInterest}
+          nps={nps}
+          setNps={setNps}
+          deductions80G={deductions80G}
+          setDeductions80G={setDeductions80G}
+          regime={regime}
+          setRegime={setRegime}
+          taxResult={taxResult}
+          setTaxResult={setTaxResult}
+          isCalculated={isCalculated}
+          setIsCalculated={setIsCalculated}
+        />
       </View>
-
-      <ScrollView style={styles.content}>
-        {renderTabContent()}
-      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -207,31 +97,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     textAlign: 'center',
     paddingHorizontal: 20,
-  },
-  tabContainer: {
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  tab: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginHorizontal: 4,
-    borderRadius: 8,
-  },
-  activeTab: {
-    backgroundColor: '#0070ba',
-  },
-  tabText: {
-    marginLeft: 8,
-    fontSize: 14,
-    color: '#666666',
-  },
-  activeTabText: {
-    color: '#ffffff',
-    fontWeight: '600',
   },
   content: {
     flex: 1,
