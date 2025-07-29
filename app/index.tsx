@@ -82,7 +82,22 @@ const Index = () => {
           />
         );
       case 'bank-import':
-        return <BankDataImport onDataImport={() => {}} />;
+        return <BankDataImport onDataImport={(data) => {
+          // Update the income field
+          setIncome(data.annualIncome.toString());
+          
+          // Update deduction fields
+          setDeductions80C(data.section80C);
+          setDeductions80D(data.section80D);
+          setDeductions80G(data.section80G);
+          setHomeLoanInterest(data.homeLoanInterest);
+          
+          // Switch to calculator tab after applying data
+          setActiveTab('calculator');
+          
+          // Show a success message (you could implement this with an Alert or a toast notification)
+          // Alert.alert('Success', 'Bank data has been applied to the tax calculator');
+        }} />;
       case 'ocr':
         return <ReceiptUpload />;
       case 'reports':
@@ -145,11 +160,8 @@ const Index = () => {
         <Text style={styles.subtitle}>AI-powered tax optimization for Indian taxpayers</Text>
       </View>
 
-      {/* Add spacing between header and tabs */}
-      <View style={{ height: 16 }} />
-
       <View style={styles.tabContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.tabScrollContainer}>
           {tabs.map((tab) => {
             const IconComponent = tab.icon;
             return (
@@ -174,12 +186,12 @@ const Index = () => {
               </TouchableOpacity>
             );
           })}
-        </ScrollView>
+        </View>
       </View>
 
-      <ScrollView style={styles.content}>
+      <View style={styles.mainContent}>
         {renderTabContent()}
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -190,7 +202,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
   },
   header: {
-    padding: 60,
+    paddingTop: 40,
+    paddingBottom: 20,
     backgroundColor: '#0070ba',
     alignItems: 'center',
   },
@@ -204,7 +217,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#ffffff',
     opacity: 0.9,
-    alignContent: 'center',
     textAlign: 'center',
     paddingHorizontal: 20,
   },
@@ -213,12 +225,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
+  tabScrollContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 8,
+  },
   tab: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginHorizontal: 4,
     borderRadius: 8,
   },
   activeTab: {
@@ -233,9 +249,9 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: '600',
   },
-  content: {
+  mainContent: {
     flex: 1,
-    padding: 16,
+    backgroundColor: '#f8f9fa',
   },
 });
 
